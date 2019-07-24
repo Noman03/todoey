@@ -11,10 +11,14 @@ import UIKit
 class todoListViewController: UITableViewController {
     
     var itemArray = ["Hello Sargodha", "Hello Punjab", "Hello Pakistan", "Hello World" ]
+    let defaults = UserDefaults.standard
     override func viewDidLoad()
     {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        if let items = defaults.array(forKey: "TodoListArray") as? [String]{
+            itemArray = items
+        }
     }
     
     
@@ -40,9 +44,12 @@ class todoListViewController: UITableViewController {
     @IBAction func addButtonPresses(_ sender: Any)
     {
         var textField = UITextField()
-        let alert = UIAlertController(title: "Add new Item", message: "", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Add new item", message: "", preferredStyle: .alert)
         let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
             self.itemArray.append(textField.text!)
+            
+            self.defaults.set(self.itemArray, forKey: "TodoListArray")
+            
             self.tableView.reloadData()
         }
         alert.addTextField { (alertTextField) in
